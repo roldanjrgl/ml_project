@@ -5,6 +5,7 @@ import itertools
 from torch.utils.data import Dataset
 from torch.distributions.categorical import Categorical
 
+from criterions import LabelSmoothingCrossEntropyLoss
 
 class MaskLayer1d(nn.Module):
     '''
@@ -75,6 +76,22 @@ class KLDivLoss(nn.Module):
           target:
         '''
         return self.kld(pred.log_softmax(dim=1), target)
+
+# mod
+class CELoss(nn.Module):
+    '''
+    Cross Entropy loss that 
+    smoothing < 0: no smoothing is applied
+    '''
+    def __init__(self, smoothing=-1, num_classes=10):
+        super().__init__()
+        if smoothing:
+            self.celoss = LabelSmoothingCrossEntropyLoss(num_classes, smoothing=smoothing)
+        else:
+            self.celoss = nn.CrossEntropyLoss()
+
+    def forward(self, pred, target):
+        return self.celoss(pred, target)
 
 
 class DatasetRepeat(Dataset):

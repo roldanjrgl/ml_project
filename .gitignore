@@ -10,3 +10,7 @@ fastshap-torch.egg-info
 *.pkl
 *.pt
 cifar-10-*
+ViT-CIFAR
+notebooks/__pycache__
+notebooks/.ipynb_checkpoints
+notebooks/models
